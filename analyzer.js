@@ -2,7 +2,10 @@ let spotData = null;
 
 async function fetchSpotData() {
     try {
-        const response = await fetch('https://ngpc-prod-public-data.s3.us-east-2.amazonaws.com/percentiles.json');
+        const cacheBustParam = `_t=${Date.now()}`;
+        const response = await fetch(`https://ngpc-prod-public-data.s3.us-east-2.amazonaws.com/percentiles.json?${cacheBustParam}`, {
+            cache: 'no-cache'
+        });
         spotData = await response.json();
         populateRegionFilter();
         populateGenerationFilter();
@@ -372,7 +375,10 @@ async function showPriceHistory(serverKey, nodeName) {
     
     try {
         // Use serverKey directly - it should be in the correct format like 'gp.vs1.large-lon'
-        const response = await fetch(`https://ngpc-prod-public-data.s3.us-east-2.amazonaws.com/history/${serverKey}`);
+        const cacheBustParam = `_t=${Date.now()}`;
+        const response = await fetch(`https://ngpc-prod-public-data.s3.us-east-2.amazonaws.com/history/${serverKey}?${cacheBustParam}`, {
+            cache: 'no-cache'
+        });
         
         if (!response.ok) {
             throw new Error('Failed to fetch price history');
